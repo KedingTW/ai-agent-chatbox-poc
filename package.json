@@ -1,0 +1,47 @@
+{
+    "name": "ai-agent-chatbox-poc",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint -c ./eslint.config.ts \"./src*/**/*.{ts,js,cjs,mjs,vue}\"",
+        "format": "prettier --tab-width 4 --print-width 100 --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
+        "dev": "vite",
+        "build": "run-p type-check \"build-only {@}\" --",
+        "preview": "vite preview",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --build",
+        "type-check:all": "run-p type-check && run-p lint && run-p format"
+    },
+    "dependencies": {
+        "@aws-sdk/client-bedrock-agentcore": "^3.908.0",
+        "@coreui/coreui": "^5.4.1",
+        "@coreui/vue": "^5.5.0",
+        "@types/lodash": "^4.17.20",
+        "dotenv": "^17.2.0",
+        "lodash": "^4.17.21",
+        "pinia": "^3.0.3",
+        "vue": "^3.5.22"
+    },
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.2",
+        "@types/node": "^22.15.32",
+        "@vitejs/plugin-vue": "^6.0.0",
+        "@vitejs/plugin-vue-jsx": "^5.0.0",
+        "@vue/eslint-config-prettier": "^10.2.0",
+        "@vue/eslint-config-typescript": "^14.5.1",
+        "@vue/tsconfig": "^0.7.0",
+        "constructs": "^10.4.2",
+        "esbuild": "^0.25.5",
+        "eslint": "^9.29.0",
+        "eslint-plugin-vue": "~10.2.0",
+        "jiti": "^2.4.2",
+        "npm-run-all2": "^8.0.4",
+        "prettier": "3.5.3",
+        "tsx": "^4.20.3",
+        "typescript": "^5.8.3",
+        "vite": "^7.0.0",
+        "vite-plugin-vue-devtools": "^7.7.7",
+        "vue-tsc": "^2.2.10"
+    }
+}
