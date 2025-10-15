@@ -8,8 +8,14 @@
 
         <div :class="contentClasses">
             <div :class="bubbleClasses">
-                <div :class="textClasses">
+                <!-- User messages: plain text -->
+                <div v-if="isUserMessage" :class="textClasses">
                     {{ message.content }}
+                </div>
+
+                <!-- Agent messages: markdown rendering -->
+                <div v-else :class="textClasses">
+                    <VMarkdownView :content="message.content" :mode="markdownMode" class="markdown-content" />
                 </div>
 
                 <!-- Streaming indicator -->
@@ -37,6 +43,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { VMarkdownView } from 'vue3-markdown'
+import 'vue3-markdown/dist/vue3-markdown.css'
 import type { MessageItemProps } from '@/types'
 
 // Props
@@ -67,6 +75,9 @@ const fullTimestamp = computed(() => {
 const showRetryButton = computed(() =>
     isMessageFailed.value && isUserMessage.value
 )
+
+// Markdown configuration for AI responses
+const markdownMode = computed(() => 'light' as const)
 
 // CSS Classes
 const messageClasses = computed(() => [
@@ -252,11 +263,6 @@ const handleRetry = () => {
     background-color: rgba(var(--cui-danger-rgb), 0.1);
 }
 
-.message-text {
-    line-height: 1.4;
-    white-space: pre-wrap;
-}
-
 .message-text--user {
     color: white;
 }
@@ -379,6 +385,122 @@ const handleRetry = () => {
     .message-bubble--user {
         border: 2px solid var(--cui-primary-dark);
     }
+}
+
+/* Markdown content styling */
+.markdown-content {
+    line-height: 1.6;
+}
+
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+    margin: 0.5rem 0;
+    font-weight: 600;
+}
+
+.markdown-content :deep(p) {
+    margin: 0.5rem 0;
+}
+
+.markdown-content :deep(p:first-child) {
+    margin-top: 0;
+}
+
+.markdown-content :deep(p:last-child) {
+    margin-bottom: 0;
+}
+
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.markdown-content :deep(li) {
+    margin: 0.25rem 0;
+}
+
+.markdown-content :deep(code) {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875em;
+}
+
+.message-bubble--user .markdown-content :deep(code) {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.markdown-content :deep(pre) {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    margin: 0.5rem 0;
+}
+
+.message-bubble--user .markdown-content :deep(pre) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.markdown-content :deep(pre code) {
+    background-color: transparent;
+    padding: 0;
+}
+
+.markdown-content :deep(blockquote) {
+    border-left: 3px solid var(--cui-gray-300);
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+    font-style: italic;
+    color: var(--cui-gray-600);
+}
+
+.message-bubble--user .markdown-content :deep(blockquote) {
+    border-left-color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.markdown-content :deep(a) {
+    color: var(--cui-primary);
+    text-decoration: underline;
+}
+
+.message-bubble--user .markdown-content :deep(a) {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.markdown-content :deep(table) {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0.5rem 0;
+    font-size: 0.875em;
+}
+
+.markdown-content :deep(th),
+.markdown-content :deep(td) {
+    border: 1px solid var(--cui-gray-300);
+    padding: 0.375rem 0.5rem;
+    text-align: left;
+}
+
+.markdown-content :deep(th) {
+    background-color: var(--cui-gray-100);
+    font-weight: 600;
+}
+
+.message-bubble--user .markdown-content :deep(th),
+.message-bubble--user .markdown-content :deep(td) {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.message-bubble--user .markdown-content :deep(th) {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Reduced motion */

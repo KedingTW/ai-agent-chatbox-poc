@@ -5,6 +5,7 @@
             <div :class="inputGroupClasses">
                 <textarea ref="textareaRef" v-model="inputValue" :class="textareaClasses" :placeholder="placeholder"
                     :disabled="disabled" rows="3" @keydown="handleKeyDown" @focus="handleFocus" @blur="handleBlur"
+                    @compositionstart="handleCompositionStart" @compositionend="handleCompositionEnd"
                     aria-label="Type your message" />
 
                 <!-- Send button -->
@@ -53,12 +54,7 @@ const isFocused = ref(false)
 const isTyping = ref(false)
 const errorMessage = ref('')
 const showKeyboardHelp = ref(false)
-const typingTimeout = ref<number>()
-
-// Constants
-const minRows = 1
-const maxRows = 6
-const characterCountId = 'character-count'
+const isComposing = ref(false)
 
 // Computed properties
 const characterCount = computed(() => inputValue.value.length)
@@ -120,30 +116,6 @@ const sendButtonClasses = computed(() => [
     }
 ])
 
-const statusBarClasses = computed(() => [
-    'message-input__status',
-    'd-flex',
-    'justify-content-between',
-    'align-items-center',
-    'mt-1',
-])
-
-const characterCountClasses = computed(() => [
-    'character-count',
-    'small',
-    {
-        'text-warning': characterCountNearLimit.value && !characterCountAtLimit.value,
-        'text-danger': characterCountAtLimit.value,
-        'text-muted': !characterCountNearLimit.value,
-    }
-])
-
-const keyboardHelpClasses = computed(() => [
-    'keyboard-help',
-    'mt-1',
-    'text-center',
-])
-
 // Methods
 const handleSubmit = () => {
     if (!canSend.value) {
@@ -161,10 +133,10 @@ const handleSubmit = () => {
 }
 
 const handleKeyDown = (event: KeyboardEvent) => {
-    // console.log('Key pressed:', event.key, 'Shift:', event.shiftKey)
+    // console.log('Key pressed:', event.key, 'Shift:', event.shiftKey, 'Composing:', isComposing.value)
 
-    // Handle Enter key
-    if (event.key === 'Enter' && !event.shiftKey) {
+    // Handle Enter key - but not during IME composition (Chinese input)
+    if (event.key === 'Enter' && !event.shiftKey && !isComposing.value) {
         event.preventDefault()
         handleSubmit()
         return
@@ -194,6 +166,14 @@ const handleBlur = () => {
     showKeyboardHelp.value = false
     setTyping(false)
     emit('blur')
+}
+
+const handleCompositionStart = () => {
+    isComposing.value = true
+}
+
+const handleCompositionEnd = () => {
+    isComposing.value = false
 }
 
 const setTyping = (typing: boolean) => {
