@@ -461,7 +461,6 @@ onUnmounted(() => {
     justify-content: center;
     text-align: center;
     min-width: 0;
-    /* Prevent grid item from overflowing */
     overflow: hidden;
 }
 
