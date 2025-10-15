@@ -10,7 +10,7 @@ import type { AWSConfig } from '@/types/aws'
 export function loadAWSConfig(): AWSConfig {
     const region = import.meta.env.VITE_AWS_REGION || 'us-east-1'
     const agentArn = import.meta.env.VITE_AWS_BEDROCK_AGENT_ARN
-    const sessionId = crypto.randomUUID() + Date.now().toString(36)
+    const sessionId = Date.now().toString(8) + Date.now().toString(8) + Date.now().toString(8)
 
     if (!agentArn) {
         throw new Error('VITE_AWS_BEDROCK_AGENT_ARN environment variable is required')
