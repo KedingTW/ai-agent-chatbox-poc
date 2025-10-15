@@ -2,7 +2,7 @@
     <div id="app">
         <div class="app-container">
             <div class="chat-wrapper">
-                <ChatContainer title="AI Assistant" :show-header="true" height="100dvh" width="100dvw" />
+                <ChatContainer title="CRM AI代理" :show-header="true" height="100dvh" width="100dvw" />
             </div>
         </div>
 
