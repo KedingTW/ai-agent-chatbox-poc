@@ -8,7 +8,7 @@
             <div class="chat-header__content">
                 <h2 class="chat-header__title">{{ title }}</h2>
             </div>
-            <div>
+            <div style="text-align: end;">
                 <div :class="statusClasses">
                     <span :class="statusIndicatorClasses"></span>
                     {{ connectionStatusText }}
@@ -113,17 +113,17 @@ const canSendMessage = computed(() => chatStore.canSendMessage && !isInitializin
 
 // UI computed properties
 const connectionStatusText = computed(() => {
-    if (isInitializing.value) return 'Connecting...'
-    if (!isConnected.value) return 'Disconnected'
-    if (isStreaming.value) return 'AI is responding...'
-    return 'Connected'
+    if (isInitializing.value) return '連線中...'
+    if (!isConnected.value) return '已斷線'
+    if (isStreaming.value) return '正在回應中...'
+    return '已上線'
 })
 
 const inputPlaceholder = computed(() => {
-    if (isInitializing.value) return 'Connecting...'
-    if (!isConnected.value) return 'Disconnected - check your connection'
-    if (isStreaming.value) return 'AI is responding...'
-    return 'Type your message...'
+    if (isInitializing.value) return '連線中...'
+    if (!isConnected.value) return '已斷線'
+    if (isStreaming.value) return '正在回應中...'
+    return '請說明你的問題...'
 })
 
 const messageListHeight = computed(() => {
@@ -435,16 +435,17 @@ onUnmounted(() => {
 
 .chat-header {
     background-color: #3d4a5d;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     padding: 5px;
     align-items: center;
-    justify-content: space-between;
+    gap: 1rem;
 }
 
 .chat-header__logo {
-    flex: 0 0 auto;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
 }
 
 .chat-header__logo-img {
@@ -454,13 +455,13 @@ onUnmounted(() => {
 }
 
 .chat-header__content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     min-width: 0;
-    /* Prevent flex item from overflowing */
+    /* Prevent grid item from overflowing */
     overflow: hidden;
 }
 
@@ -473,12 +474,10 @@ onUnmounted(() => {
 
 .chat-status {
     color: white;
-    padding-right: 20px;
     gap: 0.5rem;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    justify-content: flex-end;
 }
 
 .status-indicator {
