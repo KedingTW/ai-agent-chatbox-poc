@@ -4,9 +4,9 @@
         <!-- Empty state -->
         <div v-if="!hasMessages" :class="emptyStateClasses" role="status" aria-label="No messages yet">
             <div class="empty-state__icon">💬</div>
-            <div class="empty-state__title">Start a conversation</div>
+            <div class="empty-state__title">開始對話吧</div>
             <div class="empty-state__subtitle">
-                Send a message to begin chatting with the AI assistant
+                您可以詢問任何有關CRM的資訊，例如分析昨日的K大邀約成果
             </div>
         </div>
 
