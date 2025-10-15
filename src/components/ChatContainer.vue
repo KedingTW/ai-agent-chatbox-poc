@@ -59,10 +59,10 @@
                     </span>
                     <span class="streaming-indicator__text">AI is thinking...</span>
                 </div>
-                <button :class="cancelButtonClasses" @click="handleCancelStreaming" type="button"
+                <!-- <button :class="cancelButtonClasses" @click="handleCancelStreaming" type="button"
                     aria-label="Cancel current response">
                     Cancel
-                </button>
+                </button> -->
             </div>
 
             <!-- Message input -->
