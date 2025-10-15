@@ -247,7 +247,7 @@ const handleRetry = () => {
 }
 
 .message-bubble--agent {
-    background-color: var(--cui-gray-100);
+    background-color: #FFF;
     color: var(--cui-gray-800);
     border-bottom-left-radius: 0.25rem;
     border: 1px solid var(--cui-gray-200);
