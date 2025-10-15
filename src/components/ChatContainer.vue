@@ -2,23 +2,18 @@
     <div :class="containerClasses" :style="containerStyles">
         <!-- Header -->
         <div v-if="showHeader" :class="headerClasses">
+            <div class="chat-header__logo">
+                <img src="/images/096bca4d-b3d4-4087-9e74-6d534396cf97.png" alt="Logo" class="chat-header__logo-img" />
+            </div>
             <div class="chat-header__content">
                 <h2 class="chat-header__title">{{ title }}</h2>
+            </div>
+            <div>
                 <div :class="statusClasses">
                     <span :class="statusIndicatorClasses"></span>
                     {{ connectionStatusText }}
                 </div>
             </div>
-            <!-- <div class="chat-header__actions">
-                <button :class="headerButtonClasses" @click="handleClearChat" :disabled="!hasMessages" type="button"
-                    aria-label="Clear conversation" title="Clear conversation">
-                    🗑️
-                </button>
-                <button :class="headerButtonClasses" @click="handleToggleSettings" type="button" aria-label="Settings"
-                    title="Settings">
-                    ⚙️
-                </button>
-            </div> -->
         </div>
 
         <!-- Main chat area -->
@@ -159,10 +154,6 @@ const containerStyles = computed(() => ({
 
 const headerClasses = computed(() => [
     'chat-header',
-    'd-flex',
-    'justify-content-between',
-    'align-items-center',
-    'p-3',
     'border-bottom',
 ])
 
@@ -429,15 +420,9 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     background-color: white;
-    border: 1px solid var(--cui-gray-200);
-    border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
-}
-
-.chat-container--streaming {
-    border-color: var(--cui-info);
 }
 
 .chat-container--error {
@@ -449,20 +434,51 @@ onUnmounted(() => {
 }
 
 .chat-header {
-    background-color: var(--cui-gray-50);
-    border-bottom-color: var(--cui-gray-200);
+    background-color: #3d4a5d;
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chat-header__logo {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.chat-header__logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+.chat-header__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 0;
+    /* Prevent flex item from overflowing */
+    overflow: hidden;
 }
 
 .chat-header__title {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--cui-gray-800);
+    color: white;
 }
 
 .chat-status {
-    color: var(--cui-gray-600);
+    color: white;
+    padding-right: 20px;
     gap: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .status-indicator {
@@ -579,6 +595,14 @@ onUnmounted(() => {
         padding: 0.75rem;
     }
 
+    .chat-header__logo-img {
+        height: 32px;
+    }
+
+    .chat-header__spacer {
+        width: 32px;
+    }
+
     .chat-header__title {
         font-size: 1rem;
     }
@@ -624,11 +648,5 @@ onUnmounted(() => {
     .loading-overlay {
         backdrop-filter: none;
     }
-}
-
-/* Focus styles for accessibility */
-.chat-container:focus-within {
-    outline: 2px solid var(--cui-primary);
-    outline-offset: 2px;
 }
 </style>

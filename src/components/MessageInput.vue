@@ -233,10 +233,7 @@ defineExpose({
     transition: all 0.2s ease;
 }
 
-.message-input--focused {
-    border-color: var(--cui-primary);
-    box-shadow: 0 0 0 0.2rem rgba(var(--cui-primary-rgb), 0.25);
-}
+/* .message-input--focused styles removed */
 
 .message-input--disabled {
     background-color: var(--cui-gray-50);
@@ -275,7 +272,7 @@ defineExpose({
 }
 
 .message-input__textarea:focus {
-    border-color: var(--cui-primary);
+    /* Border color change removed */
     box-shadow: none;
 }
 
@@ -422,7 +419,7 @@ kbd {
 }
 
 .message-input__textarea:focus-visible {
-    outline: 2px solid var(--cui-primary);
-    outline-offset: 2px;
+    /* Outline color change removed */
+    outline: none;
 }
 </style>
