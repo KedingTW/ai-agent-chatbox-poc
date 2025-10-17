@@ -76,8 +76,6 @@ const isComposing = ref(false)
 
 // Computed properties
 const characterCount = computed(() => inputValue.value.length)
-const characterCountNearLimit = computed(() => characterCount.value > props.maxLength * 0.8)
-const characterCountAtLimit = computed(() => characterCount.value >= props.maxLength)
 
 const trimmedValue = computed(() => inputValue.value.trim())
 const canSend = computed(() => {
