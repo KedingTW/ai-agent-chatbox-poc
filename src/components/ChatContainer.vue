@@ -1,35 +1,9 @@
 <template>
-    <div :class="containerClasses" :style="containerStyles">
-        <!-- Header -->
-        <div v-if="showHeader" :class="headerClasses">
-            <div class="chat-header__logo">
-                <img src="/images/096bca4d-b3d4-4087-9e74-6d534396cf97.png" alt="Logo" class="chat-header__logo-img" />
-            </div>
-            <div class="chat-header__content">
-                <h2 class="chat-header__title">{{ title }}</h2>
-            </div>
-            <div style="display: flex; justify-content: end;">
-                <div :class="statusClasses">
-                    <span :class="statusIndicatorClasses"></span>
-                    {{ connectionStatusText }}
-                </div>
-                <CDropdown class="ms-2" color="secondary">
-                    <CDropdownToggle color="primary" size="sm">
-                        切換
-                    </CDropdownToggle>
-                    <CDropdownMenu>
-                        <CDropdownItem href="#">Action</CDropdownItem>
-                        <CDropdownItem href="#">Another action</CDropdownItem>
-                        <CDropdownItem href="#">Something else here</CDropdownItem>
-                    </CDropdownMenu>
-                </CDropdown>
-            </div>
-        </div>
-
+    <div :class="getContainerClass()" :style="containerStyles">
         <!-- Main chat area -->
-        <div :class="mainClasses">
+        <div :class="getMainClass()">
             <!-- Error banner -->
-            <div v-if="error" :class="errorBannerClasses" role="alert" aria-live="assertive">
+            <div v-if="error" :class="getErrorBannerClass()" role="alert" aria-live="assertive">
                 <div class="error-banner__content">
                     <span class="error-banner__icon">⚠️</span>
                     <div class="error-banner__text">
@@ -38,11 +12,11 @@
                     </div>
                 </div>
                 <div class="error-banner__actions">
-                    <button v-if="error.retryable" :class="errorRetryButtonClasses" @click="handleRetryError"
+                    <button v-if="error.retryable" :class="getErrorRetryButtonClass()" @click="handleRetryError"
                         type="button">
                         Retry
                     </button>
-                    <button :class="errorDismissButtonClasses" @click="handleDismissError" type="button"
+                    <button :class="getErrorDismissButtonClass()" @click="handleDismissError" type="button"
                         aria-label="Dismiss error">
                         ✕
                     </button>
@@ -55,16 +29,16 @@
         </div>
 
         <!-- Input area -->
-        <div :class="inputAreaClasses">
+        <div :class="getInputAreaClass()">
             <!-- Streaming indicator -->
-            <div v-if="isStreaming" :class="streamingIndicatorClasses" role="status" aria-live="polite">
+            <div v-if="isStreaming" :class="getStreamingIndicatorClass()" role="status" aria-live="polite">
                 <div class="streaming-indicator__content">
                     <span class="streaming-indicator__icon">
                         <span class="spinner-border spinner-border-sm"></span>
                     </span>
                     <span class="streaming-indicator__text">AI is thinking...</span>
                 </div>
-                <button :class="cancelButtonClasses" @click="handleCancelStreaming" type="button"
+                <button :class="getCancelButtonClass()" @click="handleCancelStreaming" type="button"
                     aria-label="Cancel current response">
                     Cancel
                 </button>
@@ -76,7 +50,7 @@
         </div>
 
         <!-- Loading overlay -->
-        <div v-if="isInitializing" :class="loadingOverlayClasses" role="status" aria-label="Initializing chat">
+        <div v-if="isInitializing" :class="getLoadingOverlayClass()" role="status" aria-label="Initializing chat">
             <div class="loading-overlay__content">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -118,17 +92,9 @@ const messages = computed(() => chatStore.messages)
 const isStreaming = computed(() => chatStore.isStreaming)
 const error = computed(() => chatStore.error)
 const isConnected = computed(() => chatStore.isConnected)
-const hasMessages = computed(() => chatStore.hasMessages)
 const canSendMessage = computed(() => chatStore.canSendMessage && !isInitializing.value)
 
 // UI computed properties
-const connectionStatusText = computed(() => {
-    if (isInitializing.value) return '連線中...'
-    if (!isConnected.value) return '已斷線'
-    if (isStreaming.value) return '正在回應中...'
-    return '已上線'
-})
-
 const inputPlaceholder = computed(() => {
     if (isInitializing.value) return '連線中...'
     if (!isConnected.value) return '已斷線'
@@ -138,127 +104,44 @@ const inputPlaceholder = computed(() => {
 
 const messageListHeight = computed(() => {
     const totalHeight = parseInt(props.height.replace('px', ''))
-    const headerHeight = props.showHeader ? 60 : 0
     const inputHeight = 120
     const streamingIndicatorHeight = isStreaming.value ? 40 : 0
     const errorBannerHeight = error.value ? 60 : 0
 
-    return `${totalHeight - headerHeight - inputHeight - streamingIndicatorHeight - errorBannerHeight}px`
+    return `${totalHeight - inputHeight - streamingIndicatorHeight - errorBannerHeight}px`
 })
 
-// CSS Classes
-const containerClasses = computed(() => [
-    'chat-container',
-    {
-        'chat-container--streaming': isStreaming.value,
-        'chat-container--error': !!error.value,
-        'chat-container--initializing': isInitializing.value,
-        'chat-container--input-focused': inputFocused.value,
-    }
-])
-
+// Container styles
 const containerStyles = computed(() => ({
     height: props.height,
     width: props.width,
 }))
 
-const headerClasses = computed(() => [
-    'chat-header',
-    'border-bottom',
-])
+// CSS Class functions
+const getContainerClass = () => {
+    let classes = 'chat-container'
+    if (isStreaming.value) classes += ' chat-container--streaming'
+    if (error.value) classes += ' chat-container--error'
+    if (isInitializing.value) classes += ' chat-container--initializing'
+    if (inputFocused.value) classes += ' chat-container--input-focused'
+    return classes
+}
 
-const statusClasses = computed(() => [
-    'chat-status',
-    'd-flex',
-    'align-items-center',
-    'small',
-])
+const getMainClass = () => 'chat-main flex-grow-1 d-flex flex-column overflow-hidden'
 
-const statusIndicatorClasses = computed(() => [
-    'status-indicator',
-    {
-        'status-indicator--connected': isConnected.value && !isInitializing.value,
-        'status-indicator--disconnected': !isConnected.value && !isInitializing.value,
-        'status-indicator--connecting': isInitializing.value,
-        'status-indicator--streaming': isStreaming.value,
-    }
-])
+const getErrorBannerClass = () => 'error-banner alert alert-danger d-flex justify-content-between align-items-center m-2 mb-0'
 
-const headerButtonClasses = computed(() => [
-    'btn',
-    'btn-outline-secondary',
-    'btn-sm',
-    'ms-2',
-])
+const getErrorRetryButtonClass = () => 'btn btn-sm btn-outline-danger me-2'
 
-const mainClasses = computed(() => [
-    'chat-main',
-    'flex-grow-1',
-    'd-flex',
-    'flex-column',
-    'overflow-hidden',
-])
+const getErrorDismissButtonClass = () => 'btn btn-sm btn-outline-danger'
 
-const errorBannerClasses = computed(() => [
-    'error-banner',
-    'alert',
-    'alert-danger',
-    'd-flex',
-    'justify-content-between',
-    'align-items-center',
-    'm-2',
-    'mb-0',
-])
+const getInputAreaClass = () => 'chat-input-area p-3 border-top'
 
-const errorRetryButtonClasses = computed(() => [
-    'btn',
-    'btn-sm',
-    'btn-outline-danger',
-    'me-2',
-])
+const getStreamingIndicatorClass = () => 'streaming-indicator d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded'
 
-const errorDismissButtonClasses = computed(() => [
-    'btn',
-    'btn-sm',
-    'btn-outline-danger',
-])
+const getCancelButtonClass = () => 'btn btn-sm btn-outline-secondary'
 
-const inputAreaClasses = computed(() => [
-    'chat-input-area',
-    'p-3',
-    'border-top',
-])
-
-const streamingIndicatorClasses = computed(() => [
-    'streaming-indicator',
-    'd-flex',
-    'justify-content-between',
-    'align-items-center',
-    'mb-2',
-    'p-2',
-    'bg-light',
-    'rounded',
-])
-
-const cancelButtonClasses = computed(() => [
-    'btn',
-    'btn-sm',
-    'btn-outline-secondary',
-])
-
-const loadingOverlayClasses = computed(() => [
-    'loading-overlay',
-    'position-absolute',
-    'top-0',
-    'start-0',
-    'w-100',
-    'h-100',
-    'd-flex',
-    'align-items-center',
-    'justify-content-center',
-    'bg-white',
-    'bg-opacity-90',
-])
+const getLoadingOverlayClass = () => 'loading-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-90'
 
 // Methods
 const initializeService = async () => {
@@ -354,22 +237,8 @@ const handleDismissError = () => {
     chatStore.clearError()
 }
 
-const handleClearChat = () => {
-    if (confirm('Are you sure you want to clear the conversation?')) {
-        chatStore.clearMessages()
-    }
-}
-
-const handleToggleSettings = () => {
-    // Settings - simplified or removed
-}
-
 const handleCancelStreaming = () => {
     chatStore.stopStreaming()
-}
-
-const handleTyping = () => {
-    // Typing indicator - simplified
 }
 
 const handleInputFocus = () => {
@@ -443,76 +312,7 @@ onUnmounted(() => {
     pointer-events: none;
 }
 
-.chat-header {
-    background-color: #3d4a5d;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    padding: 5px;
-    align-items: center;
-    gap: 1rem;
-}
 
-.chat-header__logo {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.chat-header__logo-img {
-    height: 40px;
-    width: auto;
-    object-fit: contain;
-}
-
-.chat-header__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-width: 0;
-    overflow: hidden;
-}
-
-.chat-header__title {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: white;
-}
-
-.chat-status {
-    color: white;
-    gap: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    justify-content: flex-end;
-}
-
-.status-indicator {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    display: inline-block;
-}
-
-.status-indicator--connected {
-    background-color: var(--cui-success);
-}
-
-.status-indicator--disconnected {
-    background-color: var(--cui-danger);
-}
-
-.status-indicator--connecting {
-    background-color: var(--cui-warning);
-    animation: pulse 1.5s infinite;
-}
-
-.status-indicator--streaming {
-    background-color: var(--cui-info);
-    animation: pulse 1s infinite;
-}
 
 .chat-main {
     min-height: 0;
@@ -599,22 +399,6 @@ onUnmounted(() => {
 
 /* Responsive design */
 @media (max-width: 768px) {
-    .chat-header {
-        padding: 0.75rem;
-    }
-
-    .chat-header__logo-img {
-        height: 32px;
-    }
-
-    .chat-header__spacer {
-        width: 32px;
-    }
-
-    .chat-header__title {
-        font-size: 1rem;
-    }
-
     .chat-input-area {
         padding: 0.75rem;
     }
@@ -636,9 +420,7 @@ onUnmounted(() => {
         border-width: 2px;
     }
 
-    .chat-header {
-        border-bottom-width: 2px;
-    }
+
 
     .chat-input-area {
         border-top-width: 2px;
