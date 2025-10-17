@@ -1,0 +1,31 @@
+name: Use ci-templates Master Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled]
+
+permissions:
+  actions: read
+  contents: read
+  pull-requests: write
+
+env:
+  GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+jobs:
+  call-shared:
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    uses: KedingTW/ci-templates/.github/workflows/main.yml@master
+    secrets:
+      token: ${{ secrets.PAT_TOKEN }}
+      # push_wecom_on_label.yml
+      WECHAT_URL: ${{ secrets.WECHAT_URL }}
+      # ai_code_review.yml
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_BEDROCK_ACCESS_ROLE_ARN: ${{ secrets.AWS_BEDROCK_ACCESS_ROLE_ARN }}
+      AWS_BEDROCK_EXTERNAL_ID: ${{ secrets.AWS_BEDROCK_EXTERNAL_ID }}
