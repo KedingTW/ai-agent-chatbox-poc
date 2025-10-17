@@ -1,9 +1,14 @@
 <template>
     <div :class="getContainerClass()" :style="containerStyles">
         <!-- Main chat area -->
-        <div :class="getMainClass()">
+        <div class="chat-main flex-grow-1 d-flex flex-column overflow-hidden">
             <!-- Error banner -->
-            <div v-if="error" :class="getErrorBannerClass()" role="alert" aria-live="assertive">
+            <div
+                v-if="error"
+                class="error-banner alert alert-danger d-flex justify-content-between align-items-center m-2 mb-0"
+                role="alert"
+                aria-live="assertive"
+            >
                 <div class="error-banner__content">
                     <span class="error-banner__icon">⚠️</span>
                     <div class="error-banner__text">
@@ -14,14 +19,14 @@
                 <div class="error-banner__actions">
                     <button
                         v-if="error.retryable"
-                        :class="getErrorRetryButtonClass()"
+                        class="btn btn-sm btn-outline-danger me-2"
                         @click="handleRetryError"
                         type="button"
                     >
                         Retry
                     </button>
                     <button
-                        :class="getErrorDismissButtonClass()"
+                        class="btn btn-sm btn-outline-danger"
                         @click="handleDismissError"
                         type="button"
                         aria-label="Dismiss error"
@@ -42,11 +47,11 @@
         </div>
 
         <!-- Input area -->
-        <div :class="getInputAreaClass()">
+        <div class="chat-input-area p-3 border-top">
             <!-- Streaming indicator -->
             <div
                 v-if="isStreaming"
-                :class="getStreamingIndicatorClass()"
+                class="streaming-indicator d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded"
                 role="status"
                 aria-live="polite"
             >
@@ -57,7 +62,7 @@
                     <span class="streaming-indicator__text">AI is thinking...</span>
                 </div>
                 <button
-                    :class="getCancelButtonClass()"
+                    class="btn btn-sm btn-outline-secondary"
                     @click="handleCancelStreaming"
                     type="button"
                     aria-label="Cancel current response"
@@ -79,7 +84,7 @@
         <!-- Loading overlay -->
         <div
             v-if="isInitializing"
-            :class="getLoadingOverlayClass()"
+            class="loading-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-90"
             role="status"
             aria-label="Initializing chat"
         >
@@ -158,25 +163,6 @@ const getContainerClass = () => {
     if (inputFocused.value) classes += ' chat-container--input-focused'
     return classes
 }
-
-const getMainClass = () => 'chat-main flex-grow-1 d-flex flex-column overflow-hidden'
-
-const getErrorBannerClass = () =>
-    'error-banner alert alert-danger d-flex justify-content-between align-items-center m-2 mb-0'
-
-const getErrorRetryButtonClass = () => 'btn btn-sm btn-outline-danger me-2'
-
-const getErrorDismissButtonClass = () => 'btn btn-sm btn-outline-danger'
-
-const getInputAreaClass = () => 'chat-input-area p-3 border-top'
-
-const getStreamingIndicatorClass = () =>
-    'streaming-indicator d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded'
-
-const getCancelButtonClass = () => 'btn btn-sm btn-outline-secondary'
-
-const getLoadingOverlayClass = () =>
-    'loading-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-90'
 
 // Methods
 const initializeService = async () => {

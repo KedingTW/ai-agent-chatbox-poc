@@ -11,7 +11,9 @@
                 <ChatContainer :show-header="false" height="calc(100dvh - 90px)" width="100dvw" />
             </div>
             <footer class="app-footer">
-                <div class="copyright">© {{ currentYear }} CRM AI代理. All rights reserved.</div>
+                <div class="copyright">
+                    KEDING © 2025 Keding Enterprises Co., Ltd. All rights reserved.
+                </div>
             </footer>
         </div>
 

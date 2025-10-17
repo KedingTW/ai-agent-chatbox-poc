@@ -46,7 +46,7 @@
             <!-- Retry button for failed messages -->
             <button
                 v-if="showRetryButton"
-                :class="retryButtonClasses"
+                class="message-retry-button btn btn-sm btn-outline-secondary"
                 @click="handleRetry"
                 :aria-label="`Retry sending message: ${message.content}`"
                 type="button"
@@ -159,13 +159,6 @@ const streamingIndicatorClasses = computed(() => [
     {
         'streaming-indicator--visible': props.isStreaming && props.message.isStreaming,
     },
-])
-
-const retryButtonClasses = computed(() => [
-    'message-retry-button',
-    'btn',
-    'btn-sm',
-    'btn-outline-secondary',
 ])
 
 // Event handlers

@@ -10,7 +10,7 @@
         <!-- Empty state -->
         <div
             v-if="!hasMessages"
-            :class="emptyStateClasses"
+            class="empty-state text-center p-4"
             role="status"
             aria-label="No messages yet"
         >
@@ -22,7 +22,12 @@
         </div>
 
         <!-- Message list -->
-        <div v-else ref="messagesRef" :class="messagesClasses" @scroll="handleScroll">
+        <div
+            v-else
+            ref="messagesRef"
+            class="messages h-100 overflow-auto p-3"
+            @scroll="handleScroll"
+        >
             <!-- Messages -->
             <MessageItem
                 v-for="message in messages"
@@ -36,7 +41,7 @@
             <Transition name="scroll-button">
                 <button
                     v-if="showScrollButton"
-                    :class="scrollButtonClasses"
+                    class="scroll-to-bottom btn btn-primary btn-sm rounded-circle position-fixed"
                     @click="() => scrollToBottom()"
                     type="button"
                     aria-label="Scroll to bottom of conversation"
@@ -88,19 +93,6 @@ const containerClasses = computed(() => [
 const containerStyles = computed(() => ({
     maxHeight: props.maxHeight,
 }))
-
-const emptyStateClasses = computed(() => ['empty-state', 'text-center', 'p-4'])
-
-const messagesClasses = computed(() => ['messages', 'h-100', 'overflow-auto', 'p-3'])
-
-const scrollButtonClasses = computed(() => [
-    'scroll-to-bottom',
-    'btn',
-    'btn-primary',
-    'btn-sm',
-    'rounded-circle',
-    'position-fixed',
-])
 
 // Methods
 const scrollToBottom = async (smooth: boolean = true) => {

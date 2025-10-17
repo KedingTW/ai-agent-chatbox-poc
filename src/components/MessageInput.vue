@@ -2,7 +2,7 @@
     <div :class="containerClasses">
         <form @submit.prevent="handleSubmit" class="message-input-form">
             <!-- Input field -->
-            <div :class="inputGroupClasses">
+            <div class="input-group message-input__group">
                 <textarea
                     ref="textareaRef"
                     v-model="inputValue"
@@ -108,8 +108,6 @@ const containerClasses = computed(() => [
         'message-input--error': !!errorMessage.value,
     },
 ])
-
-const inputGroupClasses = computed(() => ['input-group', 'message-input__group'])
 
 const textareaClasses = computed(() => [
     'form-control',
