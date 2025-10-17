@@ -8,11 +8,21 @@
             <div class="chat-header__content">
                 <h2 class="chat-header__title">{{ title }}</h2>
             </div>
-            <div style="text-align: end;">
+            <div style="display: flex; justify-content: end;">
                 <div :class="statusClasses">
                     <span :class="statusIndicatorClasses"></span>
                     {{ connectionStatusText }}
                 </div>
+                <CDropdown class="ms-2" color="secondary">
+                    <CDropdownToggle color="primary" size="sm">
+                        切換
+                    </CDropdownToggle>
+                    <CDropdownMenu>
+                        <CDropdownItem href="#">Action</CDropdownItem>
+                        <CDropdownItem href="#">Another action</CDropdownItem>
+                        <CDropdownItem href="#">Something else here</CDropdownItem>
+                    </CDropdownMenu>
+                </CDropdown>
             </div>
         </div>
 
