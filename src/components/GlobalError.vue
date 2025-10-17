@@ -8,7 +8,11 @@
                 <button class="btn btn-primary" @click="$emit('reload')" type="button">
                     Reload Application
                 </button>
-                <button class="btn btn-outline-secondary ms-2" @click="$emit('dismiss')" type="button">
+                <button
+                    class="btn btn-outline-secondary ms-2"
+                    @click="$emit('dismiss')"
+                    type="button"
+                >
                     Dismiss
                 </button>
             </div>

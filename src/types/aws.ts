@@ -160,11 +160,11 @@ export type MessageType = UserMessage | AgentMessage
 // Event types for component communication
 export interface ChatEvent {
     type:
-        | 'message-sent'
-        | 'message-received'
-        | 'streaming-started'
-        | 'streaming-ended'
-        | 'error-occurred'
+    | 'message-sent'
+    | 'message-received'
+    | 'streaming-started'
+    | 'streaming-ended'
+    | 'error-occurred'
     payload: unknown
     timestamp: Date
 }

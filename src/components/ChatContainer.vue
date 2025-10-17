@@ -12,45 +12,77 @@
                     </div>
                 </div>
                 <div class="error-banner__actions">
-                    <button v-if="error.retryable" :class="getErrorRetryButtonClass()" @click="handleRetryError"
-                        type="button">
+                    <button
+                        v-if="error.retryable"
+                        :class="getErrorRetryButtonClass()"
+                        @click="handleRetryError"
+                        type="button"
+                    >
                         Retry
                     </button>
-                    <button :class="getErrorDismissButtonClass()" @click="handleDismissError" type="button"
-                        aria-label="Dismiss error">
+                    <button
+                        :class="getErrorDismissButtonClass()"
+                        @click="handleDismissError"
+                        type="button"
+                        aria-label="Dismiss error"
+                    >
                         ✕
                     </button>
                 </div>
             </div>
 
             <!-- Message list -->
-            <MessageList :messages="messages" :is-streaming="isStreaming" :auto-scroll="true"
-                :max-height="messageListHeight" @message-retry="handleMessageRetry" />
+            <MessageList
+                :messages="messages"
+                :is-streaming="isStreaming"
+                :auto-scroll="true"
+                :max-height="messageListHeight"
+                @message-retry="handleMessageRetry"
+            />
         </div>
 
         <!-- Input area -->
         <div :class="getInputAreaClass()">
             <!-- Streaming indicator -->
-            <div v-if="isStreaming" :class="getStreamingIndicatorClass()" role="status" aria-live="polite">
+            <div
+                v-if="isStreaming"
+                :class="getStreamingIndicatorClass()"
+                role="status"
+                aria-live="polite"
+            >
                 <div class="streaming-indicator__content">
                     <span class="streaming-indicator__icon">
                         <span class="spinner-border spinner-border-sm"></span>
                     </span>
                     <span class="streaming-indicator__text">AI is thinking...</span>
                 </div>
-                <button :class="getCancelButtonClass()" @click="handleCancelStreaming" type="button"
-                    aria-label="Cancel current response">
+                <button
+                    :class="getCancelButtonClass()"
+                    @click="handleCancelStreaming"
+                    type="button"
+                    aria-label="Cancel current response"
+                >
                     Cancel
                 </button>
             </div>
 
             <!-- Message input -->
-            <MessageInput :disabled="!canSendMessage" :placeholder="inputPlaceholder" @send-message="handleSendMessage"
-                @focus="handleInputFocus" @blur="handleInputBlur" />
+            <MessageInput
+                :disabled="!canSendMessage"
+                :placeholder="inputPlaceholder"
+                @send-message="handleSendMessage"
+                @focus="handleInputFocus"
+                @blur="handleInputBlur"
+            />
         </div>
 
         <!-- Loading overlay -->
-        <div v-if="isInitializing" :class="getLoadingOverlayClass()" role="status" aria-label="Initializing chat">
+        <div
+            v-if="isInitializing"
+            :class="getLoadingOverlayClass()"
+            role="status"
+            aria-label="Initializing chat"
+        >
             <div class="loading-overlay__content">
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -129,7 +161,8 @@ const getContainerClass = () => {
 
 const getMainClass = () => 'chat-main flex-grow-1 d-flex flex-column overflow-hidden'
 
-const getErrorBannerClass = () => 'error-banner alert alert-danger d-flex justify-content-between align-items-center m-2 mb-0'
+const getErrorBannerClass = () =>
+    'error-banner alert alert-danger d-flex justify-content-between align-items-center m-2 mb-0'
 
 const getErrorRetryButtonClass = () => 'btn btn-sm btn-outline-danger me-2'
 
@@ -137,11 +170,13 @@ const getErrorDismissButtonClass = () => 'btn btn-sm btn-outline-danger'
 
 const getInputAreaClass = () => 'chat-input-area p-3 border-top'
 
-const getStreamingIndicatorClass = () => 'streaming-indicator d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded'
+const getStreamingIndicatorClass = () =>
+    'streaming-indicator d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded'
 
 const getCancelButtonClass = () => 'btn btn-sm btn-outline-secondary'
 
-const getLoadingOverlayClass = () => 'loading-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-90'
+const getLoadingOverlayClass = () =>
+    'loading-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-90'
 
 // Methods
 const initializeService = async () => {
@@ -198,7 +233,7 @@ const handleSendMessage = async (message: string) => {
             (error: ErrorContext) => {
                 chatStore.setError(error)
                 chatStore.removeMessage(agentMessage.id)
-            }
+            },
         )
     } catch (error) {
         const errorContext: ErrorContext = {
@@ -213,7 +248,7 @@ const handleSendMessage = async (message: string) => {
 }
 
 const handleMessageRetry = async (messageId: string) => {
-    const message = messages.value.find(m => m.id === messageId)
+    const message = messages.value.find((m) => m.id === messageId)
     if (message && message.sender === 'user') {
         await handleSendMessage(message.content)
     }
@@ -248,8 +283,6 @@ const handleInputFocus = () => {
 const handleInputBlur = () => {
     inputFocused.value = false
 }
-
-
 
 // Lifecycle
 onMounted(async () => {
@@ -311,8 +344,6 @@ onUnmounted(() => {
 .chat-container--initializing {
     pointer-events: none;
 }
-
-
 
 .chat-main {
     min-height: 0;
@@ -386,7 +417,6 @@ onUnmounted(() => {
 
 /* Animations */
 @keyframes pulse {
-
     0%,
     100% {
         opacity: 1;
@@ -420,8 +450,6 @@ onUnmounted(() => {
         border-width: 2px;
     }
 
-
-
     .chat-input-area {
         border-top-width: 2px;
     }
@@ -429,7 +457,6 @@ onUnmounted(() => {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-
     .status-indicator--connecting,
     .status-indicator--streaming {
         animation: none;

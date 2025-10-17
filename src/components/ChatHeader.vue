@@ -1,12 +1,16 @@
 <template>
     <div class="chat-header border-bottom">
         <div class="chat-header__logo">
-            <img src="/images/096bca4d-b3d4-4087-9e74-6d534396cf97.png" alt="Logo" class="chat-header__logo-img" />
+            <img
+                src="/images/096bca4d-b3d4-4087-9e74-6d534396cf97.png"
+                alt="Logo"
+                class="chat-header__logo-img"
+            />
         </div>
         <div class="chat-header__content">
             <h2 class="chat-header__title">{{ title }}</h2>
         </div>
-        <div style="text-align: end;">
+        <div style="text-align: end">
             <div class="chat-status d-flex align-items-center small">
                 <span :class="getStatusIndicatorClass()"></span>
                 {{ connectionStatusText }}
@@ -122,7 +126,6 @@ const getStatusIndicatorClass = () => {
 
 /* Animations */
 @keyframes pulse {
-
     0%,
     100% {
         opacity: 1;
@@ -150,7 +153,6 @@ const getStatusIndicatorClass = () => {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-
     .status-indicator--connecting,
     .status-indicator--streaming {
         animation: none;

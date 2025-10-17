@@ -1,8 +1,19 @@
 <template>
-    <div ref="containerRef" :class="containerClasses" :style="containerStyles" role="log" aria-live="polite"
-        aria-label="Chat conversation">
+    <div
+        ref="containerRef"
+        :class="containerClasses"
+        :style="containerStyles"
+        role="log"
+        aria-live="polite"
+        aria-label="Chat conversation"
+    >
         <!-- Empty state -->
-        <div v-if="!hasMessages" :class="emptyStateClasses" role="status" aria-label="No messages yet">
+        <div
+            v-if="!hasMessages"
+            :class="emptyStateClasses"
+            role="status"
+            aria-label="No messages yet"
+        >
             <div class="empty-state__icon">💬</div>
             <div class="empty-state__title">開始對話吧</div>
             <div class="empty-state__subtitle">
@@ -13,13 +24,23 @@
         <!-- Message list -->
         <div v-else ref="messagesRef" :class="messagesClasses" @scroll="handleScroll">
             <!-- Messages -->
-            <MessageItem v-for="message in messages" :key="message.id" :message="message"
-                :is-streaming="isStreaming && message.id === currentStreamingMessageId" @retry="handleMessageRetry" />
+            <MessageItem
+                v-for="message in messages"
+                :key="message.id"
+                :message="message"
+                :is-streaming="isStreaming && message.id === currentStreamingMessageId"
+                @retry="handleMessageRetry"
+            />
 
             <!-- Scroll to bottom button -->
             <Transition name="scroll-button">
-                <button v-if="showScrollButton" :class="scrollButtonClasses" @click="() => scrollToBottom()"
-                    type="button" aria-label="Scroll to bottom of conversation">
+                <button
+                    v-if="showScrollButton"
+                    :class="scrollButtonClasses"
+                    @click="() => scrollToBottom()"
+                    type="button"
+                    aria-label="Scroll to bottom of conversation"
+                >
                     ↓
                 </button>
             </Transition>
@@ -56,34 +77,21 @@ const currentStreamingMessageId = ref<string | null>(null)
 // Computed properties
 const hasMessages = computed(() => props.messages.length > 0)
 
-
-
 const containerClasses = computed(() => [
     'message-list',
     {
         'message-list--empty': !hasMessages.value,
         'message-list--streaming': props.isStreaming,
-    }
+    },
 ])
 
 const containerStyles = computed(() => ({
     maxHeight: props.maxHeight,
 }))
 
-const emptyStateClasses = computed(() => [
-    'empty-state',
-    'text-center',
-    'p-4',
-])
+const emptyStateClasses = computed(() => ['empty-state', 'text-center', 'p-4'])
 
-const messagesClasses = computed(() => [
-    'messages',
-    'h-100',
-    'overflow-auto',
-    'p-3',
-])
-
-
+const messagesClasses = computed(() => ['messages', 'h-100', 'overflow-auto', 'p-3'])
 
 const scrollButtonClasses = computed(() => [
     'scroll-to-bottom',
@@ -123,8 +131,6 @@ const handleScroll = () => {
     showScrollButton.value = !isAtBottom.value && hasMessages.value
 }
 
-
-
 const handleMessageRetry = (messageId: string) => {
     emit('messageRetry', messageId)
 }
@@ -137,7 +143,7 @@ watch(
             await nextTick()
             scrollToBottom(true)
         }
-    }
+    },
 )
 
 // Auto-scroll when streaming starts/updates
@@ -148,17 +154,17 @@ watch(
             await nextTick()
             scrollToBottom(false) // Don't animate during streaming for better performance
         }
-    }
+    },
 )
 
 // Track current streaming message
 watch(
     () => props.messages,
     (messages) => {
-        const streamingMessage = messages.find(m => m.isStreaming)
+        const streamingMessage = messages.find((m) => m.isStreaming)
         currentStreamingMessageId.value = streamingMessage?.id || null
     },
-    { deep: true }
+    { deep: true },
 )
 
 // Intersection Observer for auto-scroll optimization
@@ -176,7 +182,7 @@ onMounted(() => {
                     }
                 })
             },
-            { threshold: 0.1 }
+            { threshold: 0.1 },
         )
 
         // Create a sentinel element at the bottom

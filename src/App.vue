@@ -1,19 +1,25 @@
 <template>
     <div id="app">
         <div class="app-container">
-            <ChatHeader title="CRM AI代理" :is-connected="isConnected" :is-initializing="isInitializing"
-                :is-streaming="isStreaming" />
+            <ChatHeader
+                title="CRM AI代理"
+                :is-connected="isConnected"
+                :is-initializing="isInitializing"
+                :is-streaming="isStreaming"
+            />
             <div class="chat-wrapper">
                 <ChatContainer :show-header="false" height="calc(100dvh - 90px)" width="100dvw" />
             </div>
             <footer class="app-footer">
-                <div class="copyright">
-                    © {{ currentYear }} CRM AI代理. All rights reserved.
-                </div>
+                <div class="copyright">© {{ currentYear }} CRM AI代理. All rights reserved.</div>
             </footer>
         </div>
 
-        <GlobalError :error="globalError" @reload="handleReload" @dismiss="handleDismissGlobalError" />
+        <GlobalError
+            :error="globalError"
+            @reload="handleReload"
+            @dismiss="handleDismissGlobalError"
+        />
     </div>
 </template>
 
