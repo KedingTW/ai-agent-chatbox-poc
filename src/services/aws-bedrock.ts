@@ -543,6 +543,13 @@ export class AWSBedrockService {
                         .replace(/\\"/g, '"')
                     onChunk?.(text)
                 }
+                const toolUseMatch = data.match(/'stopReason':\s*'tool_use'/)
+                if (toolUseMatch) {
+                    // 如果是 'tool_use' 停止事件，輸出特定的 markdown 提示
+                    const toolUseMessage = '\n> 資料查詢中...請稍候\n\n'
+                    onChunk?.(toolUseMessage)
+
+                }
             }
         } catch (error) {
             console.warn('Error processing SSE buffer:', error, eventData.substring(0, 100) + '...')
